@@ -1,0 +1,84 @@
+<script>
+  let choices = ["Rock", "Paper", "Scissors"];
+  // let playerChoice = prompt("Rock, Paper, Scissors says...", "");
+
+  function computerPlay() {
+    let randomNumber = Math.floor(Math.random() * 3);
+    return choices[randomNumber];
+  }
+  // Check computerPlay() works
+  console.log(computerPlay());
+
+  // Lower and capitalize player's choice if not blank
+  function lowerThenCapitalize(word) {
+    if (word === "") {
+      return "Blanks cannot play here, pick a choice instead!";
+    } else {
+      return `${word[0].toUpperCase()}${word.slice(1).toLowerCase()}`;
+    }
+  }
+
+  // Function that plays one round of rock/paper/scissors between a user and computer
+  function playRound(playerSelection, computerSelection) {
+    console.log(playerSelection);
+    console.log(choices);
+
+    // let choices = ["Rock", "Paper", "Scissors"];
+    // create cases of what playerSelection can be
+    if (choices.includes(playerSelection)) {
+      if (playerSelection === computerSelection) {
+        return `It's a tie! You both chose ${playerSelection}!`;
+      } else if (
+        (playerSelection === "Rock" && computerSelection === "Scissors") ||
+        (playerSelection === "Paper" && computerSelection === "Rock") ||
+        (playerSelection === "Scissors" && computerSelection === "Paper")
+      ) {
+        return `You win! ${playerSelection} beats ${computerSelection}!`;
+      } else {
+        return `You lose! ${computerSelection} beats ${playerSelection}.`;
+      }
+    } else {
+      return `${playerSelection} is not one of the choices. Try again!`;
+    }
+  }
+  // console.log(playRound(newPlayerChoice, computerChoice));
+
+  // Create a game function that plays 5 rounds
+  function game() {
+    let playerScore = 0;
+    let computerScore = 0;
+
+    for (let i = 0; i < 5; i++) {
+      let computerChoice = computerPlay();
+      let playerChoice = prompt("Rock, Paper, Scissors says...", "");
+      let newPlayerChoice = lowerThenCapitalize(playerChoice);
+
+      let result = playRound(newPlayerChoice, computerChoice);
+      if (result === `It's a tie! You both chose ${playerChoice}!`) {
+        continue;
+      } else if (
+        result === `You win! ${newPlayerChoice} beats ${computerChoice}!`
+      ) {
+        playerScore += 1;
+      } else if (
+        result === `You lose! ${computerChoice} beats ${newPlayerChoice}.`
+      ) {
+        computerScore += 1;
+      } else {
+        continue;
+      }
+    }
+
+    if (playerScore > computerScore) {
+      return `The final score is ${playerScore}:${computerScore}, so you win! Huzzah!!!`;
+    }
+    if (computerScore > playerScore) {
+      return `The final score is ${playerScore}:${computerScore}, so you lose! Better luck next time.`;
+    }
+    if (playerScore === computerScore) {
+      return `The final score is ${playerScore}:${computerScore}. Looks like a tie!`;
+    }
+  }
+
+  console.log(game());
+</script>

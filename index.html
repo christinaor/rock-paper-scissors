@@ -5,10 +5,11 @@
     let randomNumber = Math.floor(Math.random() * 3);
     return choices[randomNumber];
   }
-  // Check computerPlay() works
-  console.log(computerPlay());
 
-  // Check if player's choice is valid
+  /* 
+  Normalize the choice if it is a valid string.
+  Otherwise, identify if it is invalid to later determine the same round needs to be replayed.
+  */
   function getValidChoice(word) {
     if (word === "") {
       confirm(`Blank is not a choice. Try again!`);
@@ -24,7 +25,11 @@
     }
   }
 
-  // Function that plays one round of rock/paper/scissors between a user and computer
+  /* 
+  Function that plays one round of rock/paper/scissors between a user and computer.
+  Returns whether the round is a win/loss/tie for use in tallying the scores and
+  determines response to the user.
+  */
   function playRound(playerSelection, computerSelection) {
     console.log(playerSelection);
     console.log(choices);
@@ -46,13 +51,13 @@
     }
   }
 
-  // Create a game function that plays 5 rounds
+  // Function that keeps score and turns of 5 games of rock/paper/scissors.
   function game() {
     let playerScore = 0;
     let computerScore = 0;
     let turns = 1;
 
-    // Round of 5
+    // While loop allows accounting for invalid prompts from the user.
     while (turns < 6) {
       let computerChoice = computerPlay();
       let promptPlayerChoice = prompt(
@@ -61,7 +66,7 @@
       );
       let playerChoice = getValidChoice(promptPlayerChoice);
 
-      // Redo turn if playerChoice is not valid - give them another try
+      // Redo turn if playerChoice is not valid
       if (playerChoice === null) {
         continue;
       }

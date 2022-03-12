@@ -1,6 +1,5 @@
 <script>
   let choices = ["Rock", "Paper", "Scissors"];
-  // let playerChoice = prompt("Rock, Paper, Scissors says...", "");
 
   function computerPlay() {
     let randomNumber = Math.floor(Math.random() * 3);
@@ -8,6 +7,18 @@
   }
   // Check computerPlay() works
   console.log(computerPlay());
+
+  // Check if player's choice is valid
+  function validateChoice(word) {
+    if (typeof word === undefined) {
+      confirm(`${word} is not a valid choice. Try again!`);
+      return;
+    }
+    if (typeof word === Number) {
+      confirm(`${word} is a number and is not a valid choice. Try again!`);
+      return;
+    }
+  }
 
   // Lower and capitalize player's choice if not blank
   function lowerThenCapitalize(word) {
@@ -27,56 +38,67 @@
     // create cases of what playerSelection can be
     if (choices.includes(playerSelection)) {
       if (playerSelection === computerSelection) {
-        return `It's a tie! You both chose ${playerSelection}!`;
+        confirm(`It's a tie! You both chose ${playerSelection}!`);
+        return "tie";
       } else if (
         (playerSelection === "Rock" && computerSelection === "Scissors") ||
         (playerSelection === "Paper" && computerSelection === "Rock") ||
         (playerSelection === "Scissors" && computerSelection === "Paper")
       ) {
-        return `You win! ${playerSelection} beats ${computerSelection}!`;
+        confirm(`You win! ${playerSelection} beats ${computerSelection}!`);
+        return "win";
+        `You win! ${playerSelection} beats ${computerSelection}!`;
       } else {
-        return `You lose! ${computerSelection} beats ${playerSelection}.`;
+        confirm(`You lose! ${computerSelection} beats ${playerSelection}.`);
+        return "lose";
       }
     } else {
+      confirm(`${playerSelection} is not one of the choices. Try again!`);
       return `${playerSelection} is not one of the choices. Try again!`;
     }
   }
-  // console.log(playRound(newPlayerChoice, computerChoice));
 
   // Create a game function that plays 5 rounds
   function game() {
     let playerScore = 0;
     let computerScore = 0;
+    let turns = 0;
 
-    for (let i = 0; i < 5; i++) {
+    while (turns < 5) {
       let computerChoice = computerPlay();
-      let playerChoice = prompt("Rock, Paper, Scissors says...", "");
-      let newPlayerChoice = lowerThenCapitalize(playerChoice);
+      let promptPlayerChoice = prompt("Rock, Paper, Scissors says...", "");
+      let playerChoice = lowerThenCapitalize(promptPlayerChoice);
 
-      let result = playRound(newPlayerChoice, computerChoice);
-      if (result === `It's a tie! You both chose ${playerChoice}!`) {
+      let result = playRound(playerChoice, computerChoice);
+      if (result === "tie") {
         continue;
-      } else if (
-        result === `You win! ${newPlayerChoice} beats ${computerChoice}!`
-      ) {
+      } else if (result === "win") {
         playerScore += 1;
-      } else if (
-        result === `You lose! ${computerChoice} beats ${newPlayerChoice}.`
-      ) {
+      } else if (result === "lose") {
         computerScore += 1;
       } else {
         continue;
       }
+
+      confirm(
+        `Current score is ${playerScore} for you and ${computerScore} for the computer.`
+      );
     }
 
     if (playerScore > computerScore) {
-      return `The final score is ${playerScore}:${computerScore}, so you win! Huzzah!!!`;
+      return confirm(
+        `The final score is ${playerScore}:${computerScore}, so you win! Huzzah!!!`
+      );
     }
     if (computerScore > playerScore) {
-      return `The final score is ${playerScore}:${computerScore}, so you lose! Better luck next time.`;
+      return confirm(
+        `The final score is ${playerScore}:${computerScore}, so you lose! Better luck next time.`
+      );
     }
     if (playerScore === computerScore) {
-      return `The final score is ${playerScore}:${computerScore}. Looks like a tie!`;
+      return confirm(
+        `The final score is ${playerScore}:${computerScore}. Looks like a tie!`
+      );
     }
   }
 

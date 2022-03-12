@@ -9,23 +9,18 @@
   console.log(computerPlay());
 
   // Check if player's choice is valid
-  function validateChoice(word) {
-    if (typeof word === undefined) {
-      confirm(`${word} is not a valid choice. Try again!`);
-      return;
-    }
-    if (typeof word === Number) {
-      confirm(`${word} is a number and is not a valid choice. Try again!`);
-      return;
-    }
-  }
-
-  // Lower and capitalize player's choice if not blank
-  function lowerThenCapitalize(word) {
+  function getValidChoice(word) {
     if (word === "") {
-      return "Blanks cannot play here, pick a choice instead!";
+      confirm(`Blank is not a choice. Try again!`);
+      return null;
+    }
+
+    let normalizedWord = word[0].toUpperCase() + word.slice(1).toLowerCase();
+    if (choices.includes(normalizedWord)) {
+      return normalizedWord;
     } else {
-      return `${word[0].toUpperCase()}${word.slice(1).toLowerCase()}`;
+      confirm(`${word} is not a valid choice. Try again!`);
+      return null;
     }
   }
 
@@ -34,27 +29,20 @@
     console.log(playerSelection);
     console.log(choices);
 
-    // let choices = ["Rock", "Paper", "Scissors"];
     // create cases of what playerSelection can be
-    if (choices.includes(playerSelection)) {
-      if (playerSelection === computerSelection) {
-        confirm(`It's a tie! You both chose ${playerSelection}!`);
-        return "tie";
-      } else if (
-        (playerSelection === "Rock" && computerSelection === "Scissors") ||
-        (playerSelection === "Paper" && computerSelection === "Rock") ||
-        (playerSelection === "Scissors" && computerSelection === "Paper")
-      ) {
-        confirm(`You win! ${playerSelection} beats ${computerSelection}!`);
-        return "win";
-        `You win! ${playerSelection} beats ${computerSelection}!`;
-      } else {
-        confirm(`You lose! ${computerSelection} beats ${playerSelection}.`);
-        return "lose";
-      }
+    if (playerSelection === computerSelection) {
+      alert(`It's a tie! You both chose ${playerSelection}!`);
+      return "tie";
+    } else if (
+      (playerSelection === "Rock" && computerSelection === "Scissors") ||
+      (playerSelection === "Paper" && computerSelection === "Rock") ||
+      (playerSelection === "Scissors" && computerSelection === "Paper")
+    ) {
+      alert(`You win! ${playerSelection} beats ${computerSelection}!`);
+      return "win";
     } else {
-      confirm(`${playerSelection} is not one of the choices. Try again!`);
-      return `${playerSelection} is not one of the choices. Try again!`;
+      alert(`You lose! ${computerSelection} beats ${playerSelection}.`);
+      return "lose";
     }
   }
 
@@ -62,41 +50,51 @@
   function game() {
     let playerScore = 0;
     let computerScore = 0;
-    let turns = 0;
+    let turns = 1;
 
-    while (turns < 5) {
+    // Round of 5
+    while (turns < 6) {
       let computerChoice = computerPlay();
-      let promptPlayerChoice = prompt("Rock, Paper, Scissors says...", "");
-      let playerChoice = lowerThenCapitalize(promptPlayerChoice);
+      let promptPlayerChoice = prompt(
+        `Round ${turns}: Rock, Paper, Scissors says...`,
+        ""
+      );
+      let playerChoice = getValidChoice(promptPlayerChoice);
 
-      let result = playRound(playerChoice, computerChoice);
-      if (result === "tie") {
-        continue;
-      } else if (result === "win") {
-        playerScore += 1;
-      } else if (result === "lose") {
-        computerScore += 1;
-      } else {
+      // Redo turn if playerChoice is not valid - give them another try
+      if (playerChoice === null) {
         continue;
       }
 
-      confirm(
+      // Increment scores and turns
+      let result = playRound(playerChoice, computerChoice);
+      if (result === "tie") {
+        turns += 1;
+      } else if (result === "win") {
+        playerScore += 1;
+        turns += 1;
+      } else if (result === "lose") {
+        computerScore += 1;
+        turns += 1;
+      }
+
+      alert(
         `Current score is ${playerScore} for you and ${computerScore} for the computer.`
       );
     }
 
     if (playerScore > computerScore) {
-      return confirm(
+      return alert(
         `The final score is ${playerScore}:${computerScore}, so you win! Huzzah!!!`
       );
     }
     if (computerScore > playerScore) {
-      return confirm(
+      return alert(
         `The final score is ${playerScore}:${computerScore}, so you lose! Better luck next time.`
       );
     }
     if (playerScore === computerScore) {
-      return confirm(
+      return alert(
         `The final score is ${playerScore}:${computerScore}. Looks like a tie!`
       );
     }
